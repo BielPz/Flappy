@@ -16,9 +16,11 @@
     - Alteração da geração de canos
     - Alteração do sistema de colisão
     - Adicionando um sistema de pontuação
+    - Sistema de captura de tecla para Linux
 */
 
 #include <termios.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>                                 // Header for standard functions
 #include <string.h>                                 // Header for string manipulation (windows.h also adds this)
@@ -48,20 +50,23 @@ void Draw();                                        // Function to draw the game
 void Pipes();                                       // Function to reset the pipes if the hit the end of the screen
 void HitTest();                                     // Function to test for collisions with the floor or the pipes
 
-char getKey()
-{
+// Ajuda do ChatGPT
+char getKey() {
     struct termios oldt, newt;
-    char ch;
-
-    tcgetattr(STDIN_FILENO, &oldt);
+    int ch;
+    
+    tcgetattr(STDIN_FILENO, &oldt);                 // Salva o estado atual do terminal
     newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
+    newt.c_lflag &= ~(ICANON | ECHO);               // Desativa buffer de linha e eco
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
+    
+    fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);       // Modo não bloqueante
     ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-    return ch;
+    
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);        // Restaura o terminal
+    fcntl(STDIN_FILENO, F_SETFL, O_BLOCK);          // Volta ao modo normal
+    
+    return (ch != EOF) ? ch : 0; // Retorna 0 se nenhuma tecla foi pressionada
 }
 
 void Draw()
@@ -308,7 +313,7 @@ void Pontuar()
 int PlayFlappy()
 {
     srand(time(NULL));                              // Sets the seed for the random number generator to the current UNIX time stamp
-    system("title \"Not Flappy Duck\"");
+    system("clear");
 
     char tecla;
 
@@ -331,8 +336,6 @@ int PlayFlappy()
     }
 
     Draw();
-
-    //system("pause>nul");                            // Pause untill the user presses a key without showing a prompt
 
     while (1)
     {
