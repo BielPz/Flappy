@@ -12,10 +12,10 @@
     source   : https://gist.github.com/smvd/aeaa7544f75988081285ab399c2579c7
     editor   : sublime text 3
 
-    Codigo base foi alterado, sendo as mudanÁas:
-    - AlteraÁ„o da geraÁ„o de canos
-    - AlteraÁ„o do sistema de colis„o
-    - Adicionando um sistema de pontuaÁ„o
+    Codigo base foi alterado, sendo as mudan√ßas:
+    - Altera√ß√£o da gera√ß√£o de canos
+    - Altera√ß√£o do sistema de colis√£o
+    - Adicionando um sistema de pontua√ß√£o
 */
 
 #include <termios.h>
@@ -53,7 +53,7 @@ char getKey()
     struct termios oldt, newt;
     char ch;
 
-    tcgerattr(STDIN_FILENO, &oldt);
+    tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
@@ -242,7 +242,7 @@ void Pipes()
     {
         if (pipes[i].x == -1)                       // If the pipe is of screen
         {
-            int spacing = (rand() % 5) + 13;        // EspaÁamento aleatÛrio entre 13 e 17
+            int spacing = (rand() % 5) + 13;        // Espa√ßamento aleat√≥rio entre 13 e 17
             pipes[i].x = (i == 0) ? pipes[2].x + spacing : pipes[i - 1].x + spacing;
             pipes[i].y = (rand() % 7) + 5;
         }
@@ -281,10 +281,10 @@ void HitTest()
         */
 
 
-        // Melhorando a detecÁ„o da colis„o horizontal
+        // Melhorando a detec√ß√£o da colis√£o horizontal
         if (bird.x >= pipes[i].x - 1 && bird.x <= pipes[i].x + 1)
         {
-            // DefiniÁ„o da ·rea segura (onde o p·ssaro pode passar sem colidir)
+            // Defini√ß√£o da √°rea segura (onde o p√°ssaro pode passar sem colidir)
             if ((bird.y < pipes[i].y -2) || (bird.y > pipes[i].y +1))
             {
                 printf("Game Over! Sua pontuacao: %d\n", pontuacao);
@@ -298,7 +298,7 @@ void Pontuar()
 {
     for (int i = 0; i < pipeCount; i++)
     {
-        if (bird.x == pipes[i].x) // SÛ pontua quando o p·ssaro exatamente passa pelo tubo
+        if (bird.x == pipes[i].x) // S√≥ pontua quando o p√°ssaro exatamente passa pelo tubo
         {
             pontuacao++;
         }
@@ -365,7 +365,7 @@ int PlayFlappy()
                 pipes[i].x--;
             }
 
-            Pontuar();                              // Atualiza a pontuaÁ„o
+            Pontuar();                              // Atualiza a pontua√ß√£o
 
             frame = 0;                              // Reset the frames
         }
