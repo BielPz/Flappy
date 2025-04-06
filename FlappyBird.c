@@ -1,8 +1,9 @@
-#include "FlappyPlay.h"
+#include "FlappyPlayLinux.h"
+#include <stdio.h>
 
 int main()
 {
-    PlayFlappy();
-
+    int saida = PlayFlappy();
+    printf("\n\nSaida: %i\n\n", saida);
     return 0;
 }
