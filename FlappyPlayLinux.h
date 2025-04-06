@@ -267,18 +267,15 @@ void Pontuar()
     }
 }
 
-int PontuacaoFinal()
+void PontuacaoFinal()
 {
     if(pontuacao >= 4)
     {
-        printf("Game Over! Voce ganhou com pontuacao de: %d\n", pontuacao);
-        ganhou = 1;
-        
+        ganhou = 1;    
     }
     else
     {
-        printf("Game Over! Voce perdeu com pontuacao de %d faltando %d para ganhar\n", pontuacao, (4-pontuacao));
-        ganhou = 0
+        ganhou = 0;
     }
 }
 
@@ -396,6 +393,14 @@ int PlayFlappy()
 
         frame++;
         usleep(100000);                                 // Wait 100 milliseconds (This may need to be tuned on faster and slower machines as -Os was enough to break it for me)
+    }
+    if(ganhou)
+    {
+        printf("\nGame Over! Voce ganhou com pontuacao de: %d\n", pontuacao);
+    }
+    else
+    {
+        printf("\nGame Over! Voce perdeu com pontuacao de %d faltando %d para ganhar\n", pontuacao, (4-pontuacao));
     }
     return ganhou;
 }
