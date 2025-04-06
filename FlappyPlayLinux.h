@@ -45,6 +45,7 @@ PIX bird;
 PIX pipes[3];
 
 int pontuacao = 0;
+int ganhou = 0;
 
 void Draw();                                        // Function to draw the game board based on the object positions
 void Pipes();                                       // Function to reset the pipes if the hit the end of the screen
@@ -254,17 +255,44 @@ void Pipes()
     }
 }
 
+void Pontuar()
+{
+    for (int i = 0; i < pipeCount; i++)
+    {
+        if (bird.x == pipes[i].x) // Só pontua quando o pássaro exatamente passa pelo tubo
+        {
+            pontuacao++;
+        }
+    }
+}
+
+void PontuacaoFinal()
+{
+    if(pontuacao >= 4)
+    {
+        printf("Game Over! Voce ganhou com pontuacao de: %d\n", pontuacao);
+        ganhou = 1;
+    }
+    else
+    {
+        printf("Game Over! Voce perdeu com pontuacao de %d faltando %d para ganhar\n", pontuacao, (4-pontuacao));
+        ganhou = 0;
+    }
+}
+
 void HitTest()
 {
     if (bird.y+1 >= ySize)                           // If the bird is on the floor
     {
-        printf("Game Over! Sua pontuacao: %d\n", pontuacao);
+        PontuacaoFinal()
+        return ganhou;
         exit(0);
     }
 
     if (bird.y+1 <= 0)                               // If the bird is on the floor
     {
-        printf("Game Over! Sua pontuacao: %d\n", pontuacao);
+        PontuacaoFinal()
+        return ganhou;
         exit(0);
     }
 
@@ -292,20 +320,10 @@ void HitTest()
             // Definição da área segura (onde o pássaro pode passar sem colidir)
             if ((bird.y < pipes[i].y -2) || (bird.y > pipes[i].y +1))
             {
-                printf("Game Over! Sua pontuacao: %d\n", pontuacao);
+                PontuacaoFinal()
+                return ganhou;
                 exit(0);
             }
-        }
-    }
-}
-
-void Pontuar()
-{
-    for (int i = 0; i < pipeCount; i++)
-    {
-        if (bird.x == pipes[i].x) // Só pontua quando o pássaro exatamente passa pelo tubo
-        {
-            pontuacao++;
         }
     }
 }
@@ -380,8 +398,6 @@ int PlayFlappy()
         frame++;
         usleep(100000);                                 // Wait 100 milliseconds (This may need to be tuned on faster and slower machines as -Os was enough to break it for me)
     }
-
-    return 0;
 }
 
 
