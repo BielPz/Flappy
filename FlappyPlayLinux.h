@@ -46,6 +46,7 @@ PIX pipes[3];
 
 int pontuacao = 0;
 int ganhou = 0;
+int Emjogo = 1;
 
 void Draw();                                        // Function to draw the game board based on the object positions
 void Pipes();                                       // Function to reset the pipes if the hit the end of the screen
@@ -272,12 +273,12 @@ int PontuacaoFinal()
     {
         printf("Game Over! Voce ganhou com pontuacao de: %d\n", pontuacao);
         ganhou = 1;
-        exit(1);
+        
     }
     else
     {
         printf("Game Over! Voce perdeu com pontuacao de %d faltando %d para ganhar\n", pontuacao, (4-pontuacao));
-        exit(0);
+        ganhou = 0
     }
 }
 
@@ -286,11 +287,13 @@ void HitTest()
     if (bird.y+1 >= ySize)                           // If the bird is on the floor
     {
         PontuacaoFinal();
+        Emjogo = 0;
     }
 
     if (bird.y+1 <= 0)                               // If the bird is on the floor
     {
         PontuacaoFinal();
+        Emjogo = 0;
     }
 
     for (int i = 0; i < pipeCount; i++)
@@ -318,6 +321,7 @@ void HitTest()
             if ((bird.y < pipes[i].y -2) || (bird.y > pipes[i].y +1))
             {
                 PontuacaoFinal();
+                Emjogo = 0;
             }
         }
     }
@@ -350,7 +354,7 @@ int PlayFlappy()
 
     Draw();
 
-    while (1)
+    while (EmJogo)
     {
         tecla = getKey();
 
@@ -393,6 +397,7 @@ int PlayFlappy()
         frame++;
         usleep(100000);                                 // Wait 100 milliseconds (This may need to be tuned on faster and slower machines as -Os was enough to break it for me)
     }
+    return ganhou;
 }
 
 
