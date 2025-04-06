@@ -46,7 +46,7 @@ PIX pipes[3];
 
 int pontuacao = 0;
 int ganhou = 0;
-int Emjogo = 1;
+int EmJogo = 1;
 
 void Draw();                                        // Function to draw the game board based on the object positions
 void Pipes();                                       // Function to reset the pipes if the hit the end of the screen
@@ -284,13 +284,13 @@ void HitTest()
     if (bird.y+1 >= ySize)                           // If the bird is on the floor
     {
         PontuacaoFinal();
-        Emjogo = 0;
+        EmJogo = 0;
     }
 
     if (bird.y+1 <= 0)                               // If the bird is on the floor
     {
         PontuacaoFinal();
-        Emjogo = 0;
+        EmJogo = 0;
     }
 
     for (int i = 0; i < pipeCount; i++)
@@ -318,7 +318,7 @@ void HitTest()
             if ((bird.y < pipes[i].y -2) || (bird.y > pipes[i].y +1))
             {
                 PontuacaoFinal();
-                Emjogo = 0;
+                EmJogo = 0;
             }
         }
     }
