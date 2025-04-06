@@ -65,7 +65,7 @@ char getKey() {
     ch = getchar();
     
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);        // Restaura o terminal
-    fcntl(STDIN_FILENO, F_SETFL, O_BLOCK);          // Volta ao modo normal
+    fcntl(STDIN_FILENO, F_SETFL, F_LOCK);          // Volta ao modo normal
     
     return (ch != EOF) ? ch : 0; // Retorna 0 se nenhuma tecla foi pressionada
 }
@@ -266,17 +266,18 @@ void Pontuar()
     }
 }
 
-void PontuacaoFinal()
+int PontuacaoFinal()
 {
     if(pontuacao >= 4)
     {
         printf("Game Over! Voce ganhou com pontuacao de: %d\n", pontuacao);
         ganhou = 1;
+        exit(1);
     }
     else
     {
         printf("Game Over! Voce perdeu com pontuacao de %d faltando %d para ganhar\n", pontuacao, (4-pontuacao));
-        ganhou = 0;
+        exit(0);
     }
 }
 
@@ -284,16 +285,12 @@ void HitTest()
 {
     if (bird.y+1 >= ySize)                           // If the bird is on the floor
     {
-        PontuacaoFinal()
-        return ganhou;
-        exit(0);
+        PontuacaoFinal();
     }
 
     if (bird.y+1 <= 0)                               // If the bird is on the floor
     {
-        PontuacaoFinal()
-        return ganhou;
-        exit(0);
+        PontuacaoFinal();
     }
 
     for (int i = 0; i < pipeCount; i++)
@@ -320,9 +317,7 @@ void HitTest()
             // Definição da área segura (onde o pássaro pode passar sem colidir)
             if ((bird.y < pipes[i].y -2) || (bird.y > pipes[i].y +1))
             {
-                PontuacaoFinal()
-                return ganhou;
-                exit(0);
+                PontuacaoFinal();
             }
         }
     }
